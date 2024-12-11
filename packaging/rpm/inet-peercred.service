@@ -1,0 +1,31 @@
+[Unit]
+Description=inet-peercred
+After=network.target network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/inet-peercred
+ExecStart=/usr/sbin/inet-peercred server
+Restart=always
+User=root
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+DevicePolicy=closed
+ProtectSystem=strict
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+MemoryDenyWriteExecute=yes
+LockPersonality=yes
+RemoveIPC=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallFilter=@system-service
+
+
+[Install]
+WantedBy=multi-user.target
