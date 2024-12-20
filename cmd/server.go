@@ -12,7 +12,6 @@ import (
 	"github.com/shirou/gopsutil/net"
 	"github.com/shirou/gopsutil/process"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -27,17 +26,6 @@ var (
 )
 
 func init() {
-	var certPath string
-	var keyPath string
-
-	serverCmd.Flags().StringVar(&certPath, "cert", "", "Path to the server certificate")
-	serverCmd.Flags().StringVar(&keyPath, "key", "", "Path to the server key")
-
-	viper.BindPFlag("cert", serverCmd.Flags().Lookup("cert"))
-	viper.BindPFlag("key", serverCmd.Flags().Lookup("key"))
-
-	viper.SetDefault("cert", "")
-	viper.SetDefault("key", "")
 
 	rootCmd.AddCommand(serverCmd)
 }
@@ -253,19 +241,8 @@ func v1_query(w http.ResponseWriter, r *http.Request) {
 }
 
 func runServer() error {
-	certPath := viper.GetString("cert")
-	keyPath := viper.GetString("key")
-
-	log.Info().
-		Str("cert", certPath).
-		Str("key", keyPath).
-		Msg("Starting server")
-
-	if certPath == "" || keyPath == "" {
-		log.Fatal().Msg("Server requires a certificate and key")
-	}
 
 	http.HandleFunc("/v1/query", v1_query)
 
-	return http.ListenAndServeTLS(":411", certPath, keyPath, nil)
+	return http.ListenAndServe(":411", nil)
 }

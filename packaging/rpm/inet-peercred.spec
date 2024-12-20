@@ -1,5 +1,5 @@
 Name:           inet-peercred
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        A simple server to provide the peer credentials of an inet socket
 
